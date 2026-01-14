@@ -12,10 +12,7 @@ on:
         options:
           - all
           - windows
-          - mac
-          - linux
           - android
-          - ios
 
 jobs:
   build:
@@ -27,12 +24,8 @@ jobs:
             platform: windows
           - os: macos-latest
             platform: mac
-          - os: ubuntu-22.04
-            platform: linux
           - os: macos-latest
-            platform: android  # Android 需 macOS 环境
-          - os: macos-latest
-            platform: ios
+            platform: android
 
     steps:
       - name: 📥 检出代码
@@ -61,27 +54,6 @@ jobs:
           cd simple_live_app
           flutter build windows --release
 
-      # macOS 构建
-      - name: 🍎 构建 macOS
-        if: ${{ matrix.platform == 'mac' }}
-        run: |
-          flutter config --enable-macos-desktop
-          cd simple_live_app
-          flutter build macos --release
-
-      # Linux 构建
-      - name: 🐧 安装 Linux 依赖
-        if: ${{ matrix.platform == 'linux' }}
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y clang cmake ninja-build pkg-config libgtk-3-dev liblzma-dev libasound2-dev
-      - name: 🐧 构建 Linux
-        if: ${{ matrix.platform == 'linux' }}
-        run: |
-          flutter config --enable-linux-desktop
-          cd simple_live_app
-          flutter build linux --release
-
       # Android 构建（使用调试签名）
       - name: 📱 设置 Java
         if: ${{ matrix.platform == 'android' }}
@@ -94,13 +66,6 @@ jobs:
         run: |
           cd simple_live_app
           flutter build apk --debug  # 使用调试签名，无需 keystore
-
-      # iOS 构建（无需签名）
-      - name: 📲 构建 iOS (Simulator)
-        if: ${{ matrix.platform == 'ios' }}
-        run: |
-          cd simple_live_app
-          flutter build ipa --no-codesign --export-options-plist=/dev/null
 
       # ========== 上传构建产物 ==========
       - name: 📤 上传构建产物到 Artifacts
