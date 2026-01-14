@@ -33,8 +33,6 @@ jobs:
             platform: android  # Android 需 macOS 环境
           - os: macos-latest
             platform: ios
-    # 仅运行用户选择的平台
-    if: ${{ github.event.inputs.platform == 'all' || github.event.inputs.platform == matrix.platform }}
 
     steps:
       - name: 📥 检出代码
