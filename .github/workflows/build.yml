@@ -12,6 +12,10 @@ jobs:
         with:
           flutter-version: "3.38.x"
           cache: true
+      - name: Create empty key.properties
+        run: |
+          cd simple_live_app/android
+          echo "" > key.properties
       - name: Build Android ARM64
         run: |
           cd simple_live_app
@@ -41,4 +45,4 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: windows-x64
-          path: simple_live_app/build/windows/runner/Release/
+          path: simple_live_app/build/windows/x64/runner/Release/
