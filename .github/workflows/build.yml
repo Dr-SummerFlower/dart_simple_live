@@ -1,8 +1,6 @@
-name: build
-
+name: build-android-windows
 on:
   workflow_dispatch:
-
 jobs:
   build-android-arm64:
     runs-on: ubuntu-latest
@@ -39,8 +37,8 @@ jobs:
         run: |
           cd simple_live_app
           flutter pub get
-          flutter_distributor package --platform windows --targets zip --skip-clean
+          flutter build windows --release
       - uses: actions/upload-artifact@v4
         with:
-          name: windows-x64-zip
-          path: simple_live_app/build/dist/*/*x64*.zip
+          name: windows-x64
+          path: simple_live_app/build/windows/runner/Release/
