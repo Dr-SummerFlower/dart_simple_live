@@ -12,10 +12,19 @@ jobs:
         with:
           flutter-version: "3.38.x"
           cache: true
-      - name: Create empty key.properties
+      - name: Setup Android keystore
+        id: android_keystore
+        uses: timheuer/base64-to-file@v1.2
+        with:
+          fileName: keystore.jks
+          encodedString: ${{ secrets.KEYSTORE_BASE64 }}
+      - name: Create key.properties
         run: |
           cd simple_live_app/android
-          echo "" > key.properties
+          echo "storeFile=${{ steps.android_keystore.outputs.filePath }}" > key.properties
+          echo "storePassword=${{ secrets.STORE_PASSWORD }}" >> key.properties
+          echo "keyPassword=${{ secrets.KEY_PASSWORD }}" >> key.properties
+          echo "keyAlias=${{ secrets.KEY_ALIAS }}" >> key.properties
       - name: Build Android ARM64
         run: |
           cd simple_live_app
